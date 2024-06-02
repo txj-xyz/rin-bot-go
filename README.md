@@ -37,7 +37,7 @@ After=network.target
 
 [Service]
 ExecStart=/srv/rin-bot-go/rin-react-bot
-WorkingDirectory=/srv/ubuntu/rin-bot-go
+WorkingDirectory=/srv/rin-bot-go
 Restart=always
 User=ubuntu
 StandardOutput=journal
