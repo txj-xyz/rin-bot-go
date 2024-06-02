@@ -60,16 +60,23 @@ func main() {
     log.Fatalf("[ERROR] Opening connection to discord, %s", err)
   }
 
+  // Create our signal listen notifier so when we attempt to escape we send it to the required
+  // Channel to exit properly instead of crashing fatally
   sc := make(chan os.Signal, 1)
   signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
   <-sc
 
 
   // close when done
-  discord.Close()
+  err = discord.Close()
+  if err != nil {
+    log.Fatal("[ERROR] Unable to connect to the discord gateway possibly ratelimited, please try again.")
+  }
+
 }
 
-
+// Message creation hook to listen to messages
+// Skip all bot based messages and only listen to the ChannelID from the .env file
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
   
   // Ignore bot owned messages
@@ -89,6 +96,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
       m.Message.ChannelID,
       m.Message.ID)
 
+    // Send out the reactions here
     s.MessageReactionAdd(m.ChannelID, m.Message.ID, "🥳")
     s.MessageReactionAdd(m.ChannelID, m.Message.ID, "💜")
     s.MessageReactionAdd(m.ChannelID, m.Message.ID, "🎉")
