@@ -40,8 +40,8 @@ ExecStart=/srv/rin-bot-go/rin-react-bot
 WorkingDirectory=/srv/ubuntu/rin-bot-go
 Restart=always
 User=ubuntu
-StandardOutput=file:/var/log/rin-bot-go/rin-react-bot.log
-StandardError=file:/var/log/rin-bot-go/rin-react-bot.log
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
@@ -55,3 +55,6 @@ Start up the Service
 
 Start the service on boot
 `sudo systemctl enable --now rin-react-bot.service`
+
+Live watch the logs
+`sudo journalctl -u rin-react-bot.service -f`
