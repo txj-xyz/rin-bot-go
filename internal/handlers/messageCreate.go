@@ -1,11 +1,11 @@
-package events
+package handlers
 
 import (
 	"log"
 	"os"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/txj-xyz/rin-bot-go/react"
+	"github.com/txj-xyz/rin-bot-go/internal/reactions"
 )
 
 var (
@@ -30,7 +30,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.ChannelID == ChannelReactListen {
-		react.ReviewReaction(s, m)
+		reactions.ReviewReaction(s, m)
 	}
 
 }

@@ -8,7 +8,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
-	"github.com/txj-xyz/rin-bot-go/events"
+	events "github.com/txj-xyz/rin-bot-go/internal/handlers"
 )
 
 // Setup the token variable here

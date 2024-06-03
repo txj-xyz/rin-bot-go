@@ -1,4 +1,4 @@
-package react
+package reactions
 
 import (
 	"log"
