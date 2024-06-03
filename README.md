@@ -5,8 +5,7 @@ Lightweight and very efficient written in GoLang
 
 
 # Usage
-Required variables are the following inside of the root dir of the executable.
-
+Required variables are the following inside of the `.env` in the root dir of the executable.
 ```env
 TOKEN=BotTokenString
 MESSAGE_REACT_CHANNEL=ChannelID
