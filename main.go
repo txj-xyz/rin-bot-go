@@ -8,12 +8,12 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
+	"github.com/txj-xyz/rin-bot-go/events"
 )
 
 // Setup the token variable here
 var (
-	Token              string
-	ChannelReactListen string
+	Token string
 )
 
 // pre main hook start check flags
@@ -28,14 +28,9 @@ func init() {
 	if Token == "" {
 		log.Fatal("[ERROR] Loading Discord Bot 'TOKEN' please try again. Exiting")
 	}
-
-	// Load up the reaction channel here
-	ChannelReactListen = os.Getenv("MESSAGE_REACT_CHANNEL")
-	if ChannelReactListen == "" {
-		log.Fatal("[ERROR] Could not find reaction channel ID from .env please try again")
-	}
 }
 
+// Main bot thread
 func main() {
 
 	discord, err := discordgo.New("Bot " + Token)
@@ -45,12 +40,10 @@ func main() {
 	}
 
 	// Register the message create event to the bot client
-	discord.AddHandler(messageCreate)
+	discord.AddHandler(events.MessageCreate)
 
 	// gracefully handle control-C exits
-	discord.AddHandler(func(_ *discordgo.Session, r *discordgo.Ready) {
-		log.Printf("[INFO] Logged in as %s", r.User.String())
-	})
+	discord.AddHandler(events.Ready)
 
 	// Register the flags needed for these perms
 	discord.Identify.Intents = discordgo.IntentsGuildMessages
@@ -73,32 +66,4 @@ func main() {
 		log.Fatal("[ERROR] Unable to connect to the discord gateway possibly ratelimited, please try again.")
 	}
 
-}
-
-// Message creation hook to listen to messages
-// Skip all bot based messages and only listen to the ChannelID from the .env file
-func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	// Ignore bot owned messages
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	// If the author of the message is a bot then we ignore it
-	if m.Author.Bot == true {
-		return
-	}
-
-	if m.ChannelID == ChannelReactListen {
-		log.Printf("[INFO] Reacted to: %v, Message URL: https://discord.com/channels/%v/%v/%v\n",
-			m.Message.Author.Username,
-			m.Message.GuildID,
-			m.Message.ChannelID,
-			m.Message.ID)
-
-		// Send out the reactions here
-		s.MessageReactionAdd(m.ChannelID, m.Message.ID, "🥳")
-		s.MessageReactionAdd(m.ChannelID, m.Message.ID, "💜")
-		s.MessageReactionAdd(m.ChannelID, m.Message.ID, "🎉")
-	}
 }
