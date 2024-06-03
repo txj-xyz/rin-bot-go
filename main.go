@@ -8,7 +8,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
-	events "github.com/txj-xyz/rin-bot-go/internal/handlers"
+	"github.com/txj-xyz/rin-bot-go/internal/handlers"
 )
 
 // Setup the token variable here
@@ -40,10 +40,10 @@ func main() {
 	}
 
 	// Register the message create event to the bot client
-	discord.AddHandler(events.MessageCreate)
+	discord.AddHandler(handlers.MessageCreate)
 
 	// gracefully handle control-C exits
-	discord.AddHandler(events.Ready)
+	discord.AddHandler(handlers.Ready)
 
 	// Register the flags needed for these perms
 	discord.Identify.Intents = discordgo.IntentsGuildMessages
